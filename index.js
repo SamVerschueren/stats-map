@@ -1,5 +1,5 @@
 'use strict';
-class SmartMap extends Map {
+class StatsMap extends Map {
 
 	constructor(iterable) {
 		super(iterable);
@@ -27,4 +27,4 @@ class SmartMap extends Map {
 	}
 }
 
-module.exports = SmartMap;
+module.exports = StatsMap;
