@@ -1,6 +1,6 @@
 {
   "name": "stats-map",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Map that keeps track of the hits and misses",
   "license": "MIT",
   "repository": "SamVerschueren/stats-map",
