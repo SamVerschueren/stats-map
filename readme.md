@@ -1,6 +1,6 @@
 # stats-map [![Build Status](https://travis-ci.org/SamVerschueren/stats-map.svg?branch=master)](https://travis-ci.org/SamVerschueren/stats-map)
 
-> [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map) that keeps track of the hits and misses
+> [Mem](https://github.com/sindresorhus/mem) cache [map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map) that keeps track of the hits and misses
 
 
 ## Install
@@ -13,19 +13,31 @@ $ npm install --save stats-map
 ## Usage
 
 ```js
-const StatsMap = require('stats-map');
+const StatsMap = require('./');
+const mem = require('mem');
 
-const map = new StatsMap();
-map.set('foo', 'bar');
+let i = 0;
+const counter = () => ++i;
 
-map.get('foo');
-//=> 'bar'
+const cache = new StatsMap();
+const memoized = mem(counter, {cache});
 
-map.get('unicorn');
-//=> undefined
+memoized('foo');
+//=> 1
 
-console.log(map.stats);
-//=> {hits: 1, misses: 1}
+// cached as it's the same argument
+memoized('foo');
+//=> 1
+
+// not cached anymore as the argument changed
+memoized('bar');
+//=> 2
+
+memoized('bar');
+//=> 2
+
+console.log(cache.stats);
+//=> {hits: 2, misses: 2}
 ```
 
 
@@ -40,6 +52,11 @@ Inherits from [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Refe
 Type: `object`
 
 The statistics of the map like the `hits` and `misses`.
+
+
+## Related
+
+- [mem](https://github.com/sindresorhus/mem) - Memoize functions - An optimization used to speed up consecutive function calls by caching the result of calls with identical input.
 
 
 ## License

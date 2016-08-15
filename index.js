@@ -14,16 +14,33 @@ class StatsMap extends Map {
 		return this._stats;
 	}
 
-	get(key) {
-		const ret = super.get(key);
+	set(key, value) {
+		const data = value.data;
 
-		if (ret) {
-			this.stats.hits++;
-		} else {
-			this.stats.misses++;
+		Object.defineProperty(value, 'data', {
+			get: () => {
+				this._stats.misses--;
+				this._stats.hits++;
+				return data;
+			}
+		});
+
+		super.set(key, value);
+	}
+
+	get(key) {
+		this._stats.misses++;
+		return super.get(key);
+	}
+
+	has(key) {
+		const has = super.has(key);
+
+		if (!has) {
+			this._stats.misses++;
 		}
 
-		return ret;
+		return has;
 	}
 }
 

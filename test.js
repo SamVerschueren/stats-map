@@ -12,10 +12,24 @@ test('initial stats', t => {
 
 test('stats', t => {
 	const map = new StatsMap();
-	map.set('foo', 'bar');
+	map.set('foo', {data: 'bar'});
 
-	t.is(map.get('foo'), 'bar');
-	t.falsy(map.get('unicorn'));
+	const ret = map.get('foo');
+
+	t.deepEqual(map.stats, {
+		hits: 0,
+		misses: 1
+	});
+
+	t.deepEqual(ret.data, 'bar');
+
+	t.deepEqual(map.stats, {
+		hits: 1,
+		misses: 0
+	});
+
+	map.has('foo');
+	map.has('unicorn');
 
 	t.deepEqual(map.stats, {
 		hits: 1,
